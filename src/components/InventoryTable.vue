@@ -1,169 +1,249 @@
 <template lang="html">
-  <div>
-    <AddInventory v-on:add-inventory="addInventory"/>
-    <table id="myTable">
-      <thead>
-        <tr>
-          <th v-bind:key="col" v-for="col in columns" v-on:click="sortTable(col)">
-            {{col}}
-            <div class="arrow" v-if="col == sortColumn" v-bind:class="ascending ? 'arrow_up' : 'arrow_down'"></div>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-bind:key="row.id" v-for="row in get_rows()">
-          <td v-bind:key="col" v-for="col in columns">{{row[col]}}</td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="pagination">
-      <div class="number"
-           v-bind:key="i"
-           v-for="i in num_pages()"
-           v-bind:class="[i == currentPage ? 'active' : '']"
-           v-on:click="change_page(i)">{{i}}</div>
-    </div>
+  <div id="app">
+  <v-app id="inspire">
+    <div>
+      <v-toolbar flat color="white">
+        <v-toolbar-title>Inventory</v-toolbar-title>
+        <v-divider
+          class="mx-2"
+          inset
+          vertical
+        ></v-divider>
+        <v-spacer></v-spacer>
+        <v-dialog v-model="dialog" max-width="500px">
+          <v-btn slot="activator" color="secondary" dark class="mb-2">New Item</v-btn>
+          <v-btn slot="activator" color="secondary" dark class="mb-2">Add Item</v-btn>
+          <v-card>
+            <v-card-title>
+              <span class="headline">{{ formTitle }}</span>
+            </v-card-title>
 
-  </div>
+            <v-card-text>
+              <v-container grid-list-md>
+                <v-layout wrap>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm6 md4>
+                    <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat @click="close">Cancel</v-btn>
+              <v-btn color="blue darken-1" flat @click="save">Save</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+      <v-data-table
+        :headers="headers"
+        :items="desserts"
+        class="elevation-1"
+      >
+        <template slot="items" slot-scope="props">
+          <td>{{ props.item.name }}</td>
+          <td class="text-xs-left">{{ props.item.calories }}</td>
+          <td class="text-xs-left">{{ props.item.fat }}</td>
+          <td class="text-xs-left">{{ props.item.carbs }}</td>
+          <td class="text-xs-left">{{ props.item.protein }}</td>
+          <td class="justify-center layout px-0">
+            <v-icon
+              small
+              class="mr-2"
+              @click="editItem(props.item)"
+            >
+              edit
+            </v-icon>
+            <v-icon
+              small
+              @click="deleteItem(props.item)"
+            >
+              delete
+            </v-icon>
+          </td>
+        </template>
+        <template slot="no-data">
+          <v-btn color="primary" @click="initialize">Reset</v-btn>
+        </template>
+      </v-data-table>
+    </div>
+  </v-app>
+</div>
 </template>
 
 <script>
-import AddInventory from './AddInventory';
-import Vue from 'vue';
 export default {
-  name: "InventoryTable",
-  components: {
-    AddInventory
-  },
+  name: 'InventoryTable',
   data() {
-    return{
-      rows: [
-        { id: 1, product: "Chandler Bing", category: 'Electronics', quantity: '10' },
-        { id: 2, product: "Ross Geller", category: 'Health & Care', quantity: '20' },
-        { id: 3, product: "Rachel Green", category: 'Electronics', quantity: '330' },
-        { id: 4, product: "Monica Geller", category: 'Cosmetics', quantity: '50' },
-        { id: 5, product: "Joey Tribbiani", category: 'Health&care', quantity: '100' },
-        { id: 6, product: "Phoebe Buffay", category: 'Electronics', quantity: '1000' }
-      ],
-      ascending: false,
-      currentPage: 1,
-      elementsPerPage: 3,
-      sortColumn: '',       //To know which column is being sorted
+    return {
+    dialog: false,
+    headers: [
+      {
+        text: 'Dessert (100g serving)',
+        align: 'left',
+        value: 'name'
+      },
+      { text: 'Calories', value: 'calories' },
+      { text: 'Fat (g)', value: 'fat' },
+      { text: 'Carbs (g)', value: 'carbs' },
+      { text: 'Protein (g)', value: 'protein' },
+      { text: 'Actions', value: 'name', sortable: false }
+    ],
+    desserts: [],
+    editedIndex: -1,
+    editedItem: {
+      name: '',
+      calories: 0,
+      fat: 0,
+      carbs: 0,
+      protein: 0
+    },
+    defaultItem: {
+      name: '',
+      calories: 0,
+      fat: 0,
+      carbs: 0,
+      protein: 0
     }
-  },
-  methods: {
-    sortTable(col) {
-      if (this.sortColumn === col) {
-        this.ascending = !this.ascending;
-      } else {
-        this.ascending = true;
-        this.sortColumn = col;
-      }
+  }
+},
 
-      var ascending = this.ascending;
-
-      this.rows.sort(function(a, b) {
-        if (a[col] > b[col]) {
-          return ascending ? 1 : -1
-        } else if (a[col] < b[col]) {
-          return ascending ? -1 : 1
-        }
-        return 0;
-      })
-    },
-    num_pages() {
-      return Math.ceil(this.rows.length / this.elementsPerPage);
-    },
-    get_rows() {
-      //console.log(this.currentPage);
-      var start = (this.currentPage-1) * this.elementsPerPage;
-      var end = start + this.elementsPerPage;
-      return this.rows.slice(start, end);
-    },
-    change_page(page) {
-      this.currentPage = page;
-    },
-    addInventory(newInventory) {
-      var myIndex=0;
-      this.rows.forEach((el, index) => {
-        if(el.id == newInventory.id) myIndex = index;
-      });
-      const temp ={
-        id: newInventory.id,
-        product: this.rows[myIndex].product,
-        category: this.rows[myIndex].category,
-        quantity: parseInt(newInventory.quantity) + parseInt(this.rows[myIndex].quantity)
-      }
-      Vue.set(this.rows,myIndex,temp);
-    }
-  },
   computed: {
-    //Used to get the table headings
-    "columns": function columns() {
-      if (this.rows.length == 0) {
-        return [];
+    formTitle () {
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+    }
+  },
+
+  watch: {
+    dialog (val) {
+      val || this.close()
+    }
+  },
+
+  created () {
+    this.initialize()
+  },
+
+  methods: {
+    initialize () {
+      this.desserts = [
+        {
+          name: 'Frozen Yogurt',
+          calories: 159,
+          fat: 6.0,
+          carbs: 24,
+          protein: 4.0
+        },
+        {
+          name: 'Ice cream sandwich',
+          calories: 237,
+          fat: 9.0,
+          carbs: 37,
+          protein: 4.3
+        },
+        {
+          name: 'Eclair',
+          calories: 262,
+          fat: 16.0,
+          carbs: 23,
+          protein: 6.0
+        },
+        {
+          name: 'Cupcake',
+          calories: 305,
+          fat: 3.7,
+          carbs: 67,
+          protein: 4.3
+        },
+        {
+          name: 'Gingerbread',
+          calories: 356,
+          fat: 16.0,
+          carbs: 49,
+          protein: 3.9
+        },
+        {
+          name: 'Jelly bean',
+          calories: 375,
+          fat: 0.0,
+          carbs: 94,
+          protein: 0.0
+        },
+        {
+          name: 'Lollipop',
+          calories: 392,
+          fat: 0.2,
+          carbs: 98,
+          protein: 0
+        },
+        {
+          name: 'Honeycomb',
+          calories: 408,
+          fat: 3.2,
+          carbs: 87,
+          protein: 6.5
+        },
+        {
+          name: 'Donut',
+          calories: 452,
+          fat: 25.0,
+          carbs: 51,
+          protein: 4.9
+        },
+        {
+          name: 'KitKat',
+          calories: 518,
+          fat: 26.0,
+          carbs: 65,
+          protein: 7
+        }
+      ]
+    },
+
+    editItem (item) {
+      this.editedIndex = this.desserts.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialog = true
+    },
+
+    deleteItem (item) {
+      const index = this.desserts.indexOf(item)
+      confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+    },
+
+    close () {
+      this.dialog = false
+      setTimeout(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      }, 300)
+    },
+
+    save () {
+      if (this.editedIndex > -1) {
+        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+      } else {
+        this.desserts.push(this.editedItem)
       }
-      return Object.keys(this.rows[0])
+      this.close()
     }
   }
 }
 </script>
 
 <style lang="css" scoped>
-table {
-  font-family: 'Open Sans', sans-serif;
-  width: 750px;
-  border-collapse: collapse;
-  border: 3px solid #44475C;
-  margin: 10px 10px 0 10px;
-}
-
-table th {
-  text-transform: uppercase;
-  text-align: left;
-  background: #44475C;
-  color: #FFF;
-  cursor: pointer;
-  padding: 8px;
-  min-width: 30px;
-}
-
-table td {
-  text-align: left;
-  padding: 8px;
-  border-right: 2px solid #7D82A8;
-}
-table td:last-child {
-  border-right: none;
-}
-table tbody tr:nth-child(2n) td {
-  background: #D4D8F9;
-}
-.arrow_down {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB8AAAAaCAYAAABPY4eKAAAAAXNSR0IArs4c6QAAAvlJREFUSA29Vk1PGlEUHQaiiewslpUJiyYs2yb9AyRuJGm7c0VJoFXSX9A0sSZN04ULF12YEBQDhMCuSZOm1FhTiLY2Rky0QPlQBLRUsICoIN/0PCsGyox26NC3eTNn3r3n3TvnvvsE1PkwGo3yUqkkEQqFgw2Mz7lWqwng7ztN06mxsTEv8U0Aam5u7r5EInkplUol/f391wAJCc7nEAgE9Uwmkzo4OPiJMa1Wq6cFs7Ozt0H6RqlUDmJXfPIx+qrX69Ti4mIyHA5r6Wq1egND+j+IyW6QAUoul18XiUTDNHaSyGazKcZtdgk8wqhUKh9o/OMvsVgsfHJy0iWqVrcQNRUMBnd6enqc9MjISAmRP3e73T9al3XnbWNjIw2+KY1Gc3imsNHR0YV4PP5+d3e32h3K316TySQFoX2WyWR2glzIO5fLTSD6IElLNwbqnFpbWyO/96lCoai0cZjN5kfYQAYi5H34fL6cxWIZbya9iJyAhULBHAqFVlMpfsV/fHxMeb3er+Vy+VUzeduzwWC45XA4dlD/vEXvdDrj8DvURsYEWK3WF4FA4JQP9mg0WrHZbEYmnpa0NxYgPVObm5teiLABdTQT8a6vrwdRWhOcHMzMzCiXlpb2/yV6qDttMpkeshEzRk4Wo/bfoe4X9vb2amzGl+HoXNT29vZqsVi0sK1jJScG+Xx+HGkL4Tew2TPi5zUdQQt9otPpuBk3e0TaHmMDh1zS7/f780S0zX6Yni+NnBj09fUZUfvudDrNZN+GkQbl8Xi8RLRtHzsB9Hr9nfn5+SjSeWUCXC7XPq5kw53wsNogjZNohYXL2EljstvtrAL70/mVaW8Y4OidRO1/gwgbUMvcqGmcDc9aPvD1gnTeQ+0nmaInokRj0nHh+uvIiVOtVvt2a2vLv7Ky0tL3cRTXIcpPAwMDpq6R4/JXE4vFQ5FI5CN+QTaRSFCYc8vLy1l0rge4ARe5kJ/d27kYkLXoy2Jo4C7K8CZOsEBvb+9rlUp1xNXPL7v3IDwxvPD6AAAAAElFTkSuQmCC')
-}
-.arrow_up {
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAaCAYAAACgoey0AAAAAXNSR0IArs4c6QAAAwpJREFUSA21Vt1PUmEYP4dvkQ8JFMwtBRocWAkDbiqXrUWXzU1rrTt0bdVqXbb1tbW16C9IBUSmm27cODdneoXjputa6069qwuW6IIBIdLvdaF4OAcOiGeDc87zPs/vd57P96WpFq7p6enbGo1mjKZpeTabjU1MTCRagGnOZHFxcXxtbe1XKpUq7+zslJeXl//Mz8+Hy+Uy3RxSE9qTk5M3otFooVQqgef4Wl9f343FYoEmoISrxuNxFX5f9vb2jhn/PxUKhfLS0tIPfFifUESRUMV8Pv/M6XReRm5rTGQyGeXxeGxYe1ezeBpBOBx2rKysbO7v79d4Wy3Y2Nj4GQqFbgnhaugxwiuGJx99Pp9FLBbXxYTXvTqd7v3MzIy6riIWGxJnMpl7AwMD14xGYyMsSq1WUyQdUqn0eSPlusQIsbGrq+vl4OCgvhFQZd1utyv1en0gEolcqsi47nWJlUrlG5fLZVcoFFy2nDKSDpIWlUoVTCQSEk4lCHmJMZ2GTCbTiMVikfIZ88l7enoos9l8dXt7+z6fDicxSJUokqDX6xXcl2wCROoc0vQCWL3sNfLOSdzR0fHY4XC4tVotl40gmVwup9xuN4OQv+UyqCFGH9rg7SOGYVRcBs3IEG4J0nVnamrqOtvuBDGGgQg9+wHFcVEi4a0LNkbdd6TrPKo8ODc311mteIIYjT/a398/jK+s1jnVM0kXoufCFvq0GuiIGEVgQIhfoygM1QrteEa9dAL7ITiYCt4RMabOK5AyKKzKWtvupLcRciu8D5J0EuDDPyT/Snd39yh6VtY2NhYQSR9G79Ds7OxdskRjEyAufvb7/cPoO5Z6e1+xtVKrq6vfcFzyi/A3ZrPZ3GdNSlwgo5ekE4X2RIQGf2C1WlufFE0GBeGWYQ8YERWLxQtnUVB830MKLZfL9RHir8lkssCn2G751tZWEWe03zTKm15YWPiEiXXTYDB0Ig/t7yd8PRws4EicwWHxO4jHD8/C5HiTTqd1BwcHFozKU89origB+y/kmzgYpgOBQP4fGmUiZmJ+WNgAAAAASUVORK5CYII=')
-}
-.arrow {
-  float: right;
-  width: 12px;
-  height: 15px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position-y: bottom;
-}
-.number {
-  display: inline-block;
-  padding: 4px 10px;
-  color: #FFF;
-  border-radius: 4px;
-  background: #44475C;
-  margin: 0px 5px;
-  cursor: pointer;
-}
-.number:hover, .number.active {
-  background: #717699;
-}
 
 </style>

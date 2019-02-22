@@ -1,87 +1,79 @@
 <template lang="html">
-  <div class="row">
-    <div class="column">
-      <div class="card">
-        <h3>Card 1</h3>
-        <p>Some text</p>
-        <p>Some text</p>
-      </div>
-    </div>
+  <div id="app">
+  <v-app id="inspire">
+    <v-layout row>
+      <v-flex xs12 sm6 offset-sm3>
+        <v-card>
 
-    <div class="column">
-      <div class="card">
-        <h3>Card 2</h3>
-        <p>Some text</p>
-        <p>Some text</p>
-      </div>
-    </div>
 
-    <div class="column">
-      <div class="card">
-        <h3>Card 3</h3>
-        <p>Some text</p>
-        <p>Some text</p>
-      </div>
-    </div>
+          <v-card-title primary-title>
+            <div>
+              <div class="headline">Top western road trips</div>
+              <span class="grey--text">1,000 miles of wonder</span>
+            </div>
+          </v-card-title>
 
-    <div class="column">
-      <div class="card">
-        <h3>Card 4</h3>
-        <p>Some text</p>
-        <p>Some text</p>
-      </div>
-    </div>
-  </div>
+          <v-card-actions>
+            <v-btn flat>Share</v-btn>
+            <v-btn flat color="purple">Explore</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="show = !show">
+              <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+            </v-btn>
+          </v-card-actions>
 
+          <v-slide-y-transition>
+            <v-card-text v-show="show">
+              I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+            </v-card-text>
+          </v-slide-y-transition>
+        </v-card>
+
+      <br />
+
+        <v-card>
+          
+
+          <v-card-title primary-title>
+            <div>
+              <div class="headline">Top western road trips</div>
+              <span class="grey--text">1,000 miles of wonder</span>
+            </div>
+          </v-card-title>
+
+          <v-card-actions>
+            <v-btn flat>Share</v-btn>
+            <v-btn flat color="purple">Explore</v-btn>
+            <v-spacer></v-spacer>
+            <v-btn icon @click="show = !show">
+              <v-icon>{{ show ? 'keyboard_arrow_down' : 'keyboard_arrow_up' }}</v-icon>
+            </v-btn>
+          </v-card-actions>
+
+          <v-slide-y-transition>
+            <v-card-text v-show="show">
+              I'm a thing. But, like most politicians, he promised more than he could deliver. You won't have time for sleeping, soldier, not with all the bed making you'll be doing. Then we'll go with that data file! Hey, you add a one and two zeros to that or we walk! You're going to do his laundry? I've got to find a way to escape.
+            </v-card-text>
+          </v-slide-y-transition>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-app>
+
+</div>
 </template>
 
 <script>
 export default {
-  name: "MainChain"
+  name: "MainChain",
+  data() {
+    return {
+      show: false
+    }
+  }
 }
 </script>
 
 <style lang="css" scoped>
-<style>
-  * {
-  box-sizing: border-box;
-  }
 
-  body {
-  font-family: Arial, Helvetica, sans-serif;
-  }
-
-  /* Float four columns side by side */
-  .column {
-  float: left;
-  width: 23%;
-  padding: 0 10px;
-  }
-
-  /* Remove extra left and right margins, due to padding */
-  .row {margin: 0 -5px;}
-
-  /* Clear floats after the columns */
-  .row:after {
-  content: "";
-  display: table;
-  clear: both;
-  }
-
-  /* Responsive columns */
-  @media screen and (max-width: 600px) {
-  .column {
-    width: 100%;
-    display: block;
-    margin-bottom: 20px;
-  }
-  }
-
-  /* Style the counter cards */
-  .card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  padding: 16px;
-  text-align: center;
-  background-color: #f1f1f1;
-  }
 </style>

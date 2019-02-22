@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <h1>Inventory</h1>
     <InventoryTable />
   </div>
 </template>
