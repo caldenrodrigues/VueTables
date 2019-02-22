@@ -18,6 +18,12 @@
   </div>
 </template>
 
+<script type="text/javascript">
+  export default {
+    name: "App"
+  }
+</script>
+
 <style>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;

@@ -1,13 +1,23 @@
 <template lang="html">
-  <ProductChain />
+  <div class="">
+    <ProductID v-on:add-id="addID()"/>
+    <ProductChain />
+  </div>
+
 </template>
 
 <script>
-import ProductChain from '../components/ProductChain.vue'
+import ProductChain from '../components/ProductChain.vue';
+import ProductID from '../components/ProductID.vue'
 export default {
   name: "Product",
   components: {
-    ProductChain
+    ProductChain,
+    ProductID,
+  },
+  methods: {
+    addID() {
+    }
   }
 }
 </script>
