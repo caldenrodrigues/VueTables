@@ -23,8 +23,9 @@
             <v-layout>
               <v-flex xs10>
                 <pre>
-                  Organization Name : Farmer Rocks
-                  Address : Some Random Address in nagpur.
+                   <strong class="orange--text text--lighten-1">Organization Name : </strong> Farmer Rocks
+
+                <strong class="orange--text text--lighten-1">Address : </strong>Some Random Address in nagpur.
                 </pre>
               </v-flex>
               <v-flex xs2>
@@ -219,8 +220,10 @@ Amount: 10500
             <v-layout>
               <v-flex xs10>
                 <pre>
-                  Organization Name : Trader Rocks
-                  Address : Some Trader Address in nagpur.
+                  <strong class="blue--text text--lighten-1">Organization Name : </strong> Trader Rocks
+
+               <strong class="blue--text text--lighten-1">Address : </strong>Some Random Address in nagpur.
+
                 </pre>
               </v-flex>
               <v-flex xs2>

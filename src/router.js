@@ -4,7 +4,7 @@ import Home from './views/Home.vue'
 import Chain from './views/Chain.vue'
 import Product from './views/Product.vue'
 import Form from './views/Form.vue'
-
+import Login from './views/Login.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -36,6 +36,12 @@ export default new Router({
       path: '/form',
       name: 'form',
       component: Form
-    }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+
   ]
 })
