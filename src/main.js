@@ -1,10 +1,16 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-
 import Vuetify from 'vuetify'
+import * as VueGoogleMaps from 'vue2-google-maps'
 
 Vue.use(Vuetify)
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyBNneAfFsvatq5-TVeOwSAKExmTCEnwCJg',
+  },
+})
 
 import 'vuetify/dist/vuetify.min.css'
 

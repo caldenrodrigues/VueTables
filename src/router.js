@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Chain from './views/Chain.vue'
 import Product from './views/Product.vue'
+import Form from './views/Form.vue'
 
 Vue.use(Router)
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/product',
       name: 'product',
       component: Product
+    },
+    {
+      path: '/form',
+      name: 'form',
+      component: Form
     }
   ]
 })

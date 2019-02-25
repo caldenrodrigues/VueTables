@@ -3,21 +3,21 @@
     <v-app id="inspire">
       <v-container style="max-width: 600px;">
         <v-timeline dense clipped>
-          <v-timeline-item
-        color="amber darken-4"
-        fill-dot
-        right
-      >
+        <v-timeline-item
+          color="amber darken-4"
+          fill-dot
+          right
+        >
         <v-card>
           <v-card-title class="amber darken-4">
-            <v-icon
+            <!--v-icon
               dark
               size="42"
               class="mr-3"
             >
               mdi-magnify
-            </v-icon>
-            <h2 class="display-1 white--text font-weight-light">Title 1</h2>
+            </v-icon-->
+            <h2 class="display-1 white--text font-weight-light">Supplier</h2>
           </v-card-title>
           <v-container>
             <v-layout>
@@ -32,7 +32,7 @@
         </v-card>
       </v-timeline-item>
 
-          <v-slide-x-transition
+          <!--v-slide-x-transition
             group
           >
             <v-timeline-item
@@ -54,7 +54,7 @@
             hide-dot
           >
             <span>TODAY</span>
-          </v-timeline-item>
+          </v-timeline-item-->
 
           <v-timeline-item
             class="mb-3"
@@ -62,10 +62,39 @@
             small
           >
             <v-layout justify-space-between>
-              <v-flex xs7>This order was archived.</v-flex>
+              <v-flex xs7>
+                <v-btn small color="primary" dark @click="salesDialog = true">Sales Order</v-btn>
+                This order was Placed.
+              </v-flex>
               <v-flex xs5 text-xs-right>15:26 EDT</v-flex>
             </v-layout>
           </v-timeline-item>
+
+          <!-- Dialog for Sales Order-->
+          <v-dialog
+          v-model="salesDialog"
+          max-width="290"
+        >
+          <v-card>
+            <v-card-title class="headline">Sales Order</v-card-title>
+
+            <v-card-text>
+              Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+              <v-btn
+                color="green darken-1"
+                flat="flat"
+                @click="salesDialog = false"
+              >
+                OK
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
 
           <v-timeline-item
             class="mb-3"
@@ -139,7 +168,7 @@
             >
               mdi-magnify
             </v-icon>
-            <h2 class="display-1 white--text font-weight-light">Title 1</h2>
+            <h2 class="display-1 white--text font-weight-light">Manufacturer</h2>
           </v-card-title>
           <v-container>
             <v-layout>
@@ -162,7 +191,12 @@
 
 <script>
 export default {
-  name: "ProductChain"
+  name: "ProductChain",
+  data() {
+    return {
+      salesDialog: false,
+    }
+  },
 }
 </script>
 
