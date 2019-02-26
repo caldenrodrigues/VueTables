@@ -9,7 +9,7 @@
               color="green accent-4"
               @click="dialog = true"
             >
-              <v-icon style="height: auto">map</v-icon>
+              <v-icon style="height: auto">pin_drop</v-icon>
     </v-btn>
 
     <v-dialog
@@ -20,17 +20,38 @@
           <v-card-title class="headline">Location</v-card-title>
 
           <v-card-text>
-            <GmapMap v-bind:center="center" v-bind:zoom="7"
+            <gmap-map v-bind:center="center" v-bind:zoom="11"
             style="height: 500px">
-              <GmapMarker
+              <gmap-marker
               v-bind:key="index"
               v-for="(m,index) in markers"
               v-bind:position="m.position"
               v-bind:clickable="true"
               v-bind:draggable="true"
-              @click="center=m.position">
-              </GmapMarker>
-            </GmapMap>
+              v-bind:label="m.label"
+              @click="openWindow(m)" />
+
+              <gmap-info-window
+                @closeclick="window_open=false"
+                :opened="window_open"
+                :position="infowindow"
+                :options="{
+                  pixelOffset: {
+                    width: 0,
+                    height: -35
+                  }
+                }"
+              >
+              <div>
+              <div class="headline">{{this.infoName}}</div>
+              <span class="grey--text">{{this.infoAddr}}</span>
+            </div>
+            </gmap-info-window>
+
+            <gmap-polyline v-bind:path.sync="path" v-bind:options="{ strokeColor:'#008000'}">
+
+         </gmap-polyline>
+            </gmap-map>
           </v-card-text>
 
           <v-card-actions>
@@ -55,18 +76,42 @@ export default {
   name: "Gmap",
   data() {
     return {
-      center: {lat:62.0, lng:10.0},
+      center: {lat: 19.392550, lng: 72.825293},
+      path: [
+            {lat: 19.392550, lng: 72.825293},
+            {lat: 19.219493, lng:72.966747},
+            ],
       markers: [
         {
-          position: {lat: 62.0, lng: 10.0}
+          label: "S",
+          title: "Raw Material Supplier",
+          name: "Awesome Farmer",
+          addr: "Some Address, In some location, In mumbai",
+          position: {lat: 19.392550, lng: 72.825293}
         },
         {
-          position: {lat: 63.0, lng:11.0}
+          label: "T",
+          title: "Trader",
+          name: "Awesome Trader name",
+          addr: "Some Address, In some location, In mumbai",
+          position: {lat: 19.219493, lng:72.966747}
 
         }
       ],
-      dialog: false
+      infowindow: {lat: 10, lng: 10.0},
+      infoName: "",
+      infoAddr: "",
+      window_open: false,
+      dialog: false,
     }
+  },
+  methods: {
+    openWindow (m) {
+            this.infowindow = m.position;
+            this.infoName = m.name;
+            this.infoAddr = m.addr;
+            this.window_open = true
+        }
   }
 }
 </script>
