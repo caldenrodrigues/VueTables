@@ -42,7 +42,7 @@
       >
         <v-layout justify-space-between>
           <v-flex xs7>
-            The Order was placed by "Awesome Trader"<br/><br/>
+            The Order was placed by "Awesome rawMaterialSupplier"<br/><br/>
             <v-btn small color="primary" dark @click="salesDialog = true">Sales Order</v-btn>
           </v-flex>
           <v-flex xs5 text-xs-right>15:26 EDT</v-flex>
@@ -187,15 +187,15 @@
               >
                 mdi-magnify
               </v-icon>
-              <h2 class="display-1 white--text font-weight-light">Trader</h2>
+              <h2 class="display-1 white--text font-weight-light">rawMaterialSupplier</h2>
             </v-card-title>
             <v-container>
               <v-layout>
 
                   <v-flex xs10>
-                      <h2 class="text-lg-left blue--text text--lighten-1">Organization Name : </h2><h3 class="text-lg-left">{{chainDetails.trader.name}}</h3>
+                      <h2 class="text-lg-left blue--text text--lighten-1">Organization Name : </h2><h3 class="text-lg-left">{{chainDetails.rawMaterialSupplier.name}}</h3>
                       <br />
-                      <h2 class="text-lg-left blue--text text--lighten-1">Address :</h2><h3 class="text-lg-left">{{chainDetails.trader.address1}}<br>{{chainDetails.trader.address2}}<br />{{chainDetails.trader.address3}}</h3>
+                      <h2 class="text-lg-left blue--text text--lighten-1">Address :</h2><h3 class="text-lg-left">{{chainDetails.rawMaterialSupplier.address1}}<br>{{chainDetails.rawMaterialSupplier.address2}}<br />{{chainDetails.rawMaterialSupplier.address3}}</h3>
                   </v-flex>
 
 
@@ -729,6 +729,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: "ProductChain",
   data() {
@@ -776,6 +777,11 @@ export default {
       }
     }
   },
+  //http://192.168.43.149:8080/test
+  created() {
+    axios.get('http://192.168.43.149:8080/test')
+      .then(res => {this.chainDetails = res.data});
+  }
 }
 </script>
 
