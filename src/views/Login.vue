@@ -5,7 +5,7 @@
 <script>
 import login from '../components/login.vue'
 export default {
-  name: 'login',
+  name: 'Login',
   components: {
     login
   }
