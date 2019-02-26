@@ -22,11 +22,11 @@
           <v-container>
             <v-layout>
               <v-flex xs10>
-                <pre>
-                   <strong class="orange--text text--lighten-1">Organization Name : </strong> Farmer Rocks
-
-                <strong class="orange--text text--lighten-1">Address : </strong>Some Random Address in nagpur.
-                </pre>
+                <p>
+                  <h2 class="text-lg-left blue--text text--lighten-1">Organization Name : </h2><h3 class="text-lg-left"> Trader Rocks</h3>
+                  <br />
+                  <h2 class="text-lg-left blue--text text--lighten-1">Address :</h2><h3 class="text-lg-left"> Some Trader Address in nagpur. <br>Maharastra<br />India</h3>
+                </p>
               </v-flex>
               <v-flex xs2>
                 <v-icon size="64">mdi-calendar-text</v-icon>
@@ -67,10 +67,22 @@
           >
             <v-layout justify-space-between>
               <v-flex xs7>
-                <v-btn small color="primary" dark @click="salesDialog = true">Sales Order</v-btn>
-                This order was Placed.
+                The Order was placed by "Awesome Trader"
               </v-flex>
               <v-flex xs5 text-xs-right>15:26 EDT</v-flex>
+            </v-layout>
+          </v-timeline-item>
+
+          <v-timeline-item
+            class="mb-3"
+            icon-color="grey lighten-2"
+            small
+            hide-dot
+          >
+            <v-layout justify-space-between>
+              <v-flex xs7>
+                <v-btn small color="primary" dark @click="salesDialog = true">Sales Order</v-btn>
+              </v-flex>
             </v-layout>
           </v-timeline-item>
 
@@ -113,10 +125,22 @@ Amount: 10500
               >
                 <v-layout justify-space-between>
                   <v-flex xs7>
-                    <v-btn small color="primary" dark @click="packTicket = true">Packing Ticket</v-btn>
-                    Order is packed.
+                    Order is packed and ready to be shipped.
                   </v-flex>
                   <v-flex xs5 text-xs-right>18:45 IST</v-flex>
+                </v-layout>
+              </v-timeline-item>
+
+              <v-timeline-item
+                class="mb-3"
+                icon-color="grey lighten-2"
+                small
+                hide-dot
+              >
+                <v-layout justify-space-between>
+                  <v-flex xs7>
+                    <v-btn small color="primary" dark @click="packTicket = true">Packing Ticket</v-btn>
+                  </v-flex>
                 </v-layout>
               </v-timeline-item>
 
@@ -158,10 +182,22 @@ Amount: 10500
             >
               <v-layout justify-space-between>
                 <v-flex xs7>
-                  <v-btn small color="primary" dark @click="shipTicket = true">Shipment Ticket</v-btn>
-                  Order has arrived.
+                  Order has arrived at "Awesome Place".
                 </v-flex>
                 <v-flex xs5 text-xs-right>22:45 IST</v-flex>
+              </v-layout>
+            </v-timeline-item>
+
+            <v-timeline-item
+              class="mb-3"
+              icon-color="grey lighten-2"
+              small
+              hide-dot
+            >
+              <v-layout justify-space-between>
+                <v-flex xs7>
+                  <v-btn small color="primary" dark @click="shipTicket = true">Shipment Ticket</v-btn>
+                </v-flex>
               </v-layout>
             </v-timeline-item>
 
@@ -218,14 +254,16 @@ Amount: 10500
           </v-card-title>
           <v-container>
             <v-layout>
-              <v-flex xs10>
-                <pre>
-                  <strong class="blue--text text--lighten-1">Organization Name : </strong> Trader Rocks
 
-               <strong class="blue--text text--lighten-1">Address : </strong>Some Random Address in nagpur.
+                <v-flex xs10>
+                  <p >
+                    <h2 class="text-lg-left blue--text text--lighten-1">Organization Name : </h2><h3 class="text-lg-left"> Trader Rocks</h3>
+                    <br />
+                    <h2 class="text-lg-left blue--text text--lighten-1">Address :</h2><h3 class="text-lg-left"> Some Trader Address in nagpur. <br>Maharastra<br />India</h3>
+                  </p>
+                </v-flex>
 
-                </pre>
-              </v-flex>
+
               <v-flex xs2>
                 <v-icon size="64">mdi-calendar-text</v-icon>
               </v-flex>
